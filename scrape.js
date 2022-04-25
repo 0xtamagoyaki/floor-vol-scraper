@@ -2,16 +2,17 @@ const fetch = require("node-fetch");
 
 const endpoint =
   "https://api-bff.nftpricefloor.com/nft/forgotten-runes-wizards-cult/chart/pricefloor?interval=all";
-const duration = 3 * 30; // 8 hour periods
+const days = 30;
+const duration = 3 * days; // 8 hour periods
 
 const main = async () => {
   const { dataPriceFloorETH } = await fetch(endpoint).then((r) => r.json());
-  const floorStdev = stdev(dataPriceFloorETH.slice(-3 * 30));
+  const floorStdev = stdev(dataPriceFloorETH.slice(-1 * duration));
   const vol = floorStdev * Math.sqrt(duration);
 
-  console.log("running", dataPriceFloorETH.slice(-30));
+  console.log("running", dataPriceFloorETH.slice(-1 * days));
   console.log("vol", vol);
-  console.log("len", dataPriceFloorETH.slice(-3 * 30).length);
+  console.log("len", dataPriceFloorETH.slice(-1 * duration).length);
 };
 
 const stdev = (periods) => {
